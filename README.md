@@ -10,4 +10,4 @@ Features:
  
 Screens:
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="aCuSawK"><a href="//imgur.com/aCuSawK">GIF walkthrough</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+<blockquote class="imgur-embed-pub" lang="en" data-id="aCuSawK"><a href="http://i.imgur.com/aCuSawK.gifv">GIF walkthrough</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
