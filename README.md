@@ -7,6 +7,7 @@ Features:
  * Add new note
  * Remove note
  * Edit note
+ * Save to local file
  
 Screens:
 
