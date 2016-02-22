@@ -9,5 +9,5 @@ Features:
  * Edit note
  
 Screens:
- 
-<img src="http://i.imgur.com/aCuSawK.gifv" width="250" />
+
+<blockquote class="imgur-embed-pub" lang="en" data-id="aCuSawK"><a href="//imgur.com/aCuSawK">GIF walkthrough</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
