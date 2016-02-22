@@ -10,4 +10,4 @@ Features:
  
 Screens:
  
-<img src="http://imgur.com/aCuSawK" width="250" />
+<img src="http://i.imgur.com/aCuSawK.gifv" width="250" />
