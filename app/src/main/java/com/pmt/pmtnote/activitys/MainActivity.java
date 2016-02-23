@@ -1,40 +1,40 @@
-package com.pmt.pmtnote;
+package com.pmt.pmtnote.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import org.apache.commons.io.FileUtils;
+import com.pmt.pmtnote.Addapters.NoteAddapter;
+import com.pmt.pmtnote.R;
+import com.pmt.pmtnote.models.Note;
+import com.pmt.pmtnote.services.DatabaseManager;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<String> notes;
-    ArrayAdapter<String> notesAddapter;
+    ArrayList<Note> notes;
+    NoteAddapter notesAddapter;
     ListView lvNotes;
     private final int REQUEST_CODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("Main", "INIT Porject");
+        DatabaseManager db = DatabaseManager.getInstance(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupData();
     }
 
     private void setupData(){
-        notes = new ArrayList<String>();
-        notes.add("Note 1");
-        notes.add("Note 2");
-        notes.add("Note 3");
-        readFile();
-        notesAddapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, notes);
+
+        readData();
+        notesAddapter = new NoteAddapter(this, notes);
 
         lvNotes = (ListView)findViewById(R.id.lvNotes);
         lvNotes.setAdapter(notesAddapter);
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String note = notes.get(position).toString();
+                        Note note = notes.get(position);
                         Intent i = new Intent(MainActivity.this, EditNoteActivity.class);
                         i.putExtra("note", note); // pass arbitrary data to launched activity
                         i.putExtra("position", position); // pass arbitrary data to launched activity
@@ -66,11 +66,10 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
 //            setContentView(R.layout.activity_main);
 
-            String note = data.getExtras().getString("note");
+            Note note = (Note)data.getSerializableExtra("note");
             int position = data.getExtras().getInt("position",0);
             notes.set(position, note);
             notesAddapter.notifyDataSetChanged();
-            writeFile();
         }
     }
     private void setupDeleteNoteHandle() {
@@ -78,9 +77,10 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                        Note note = notes.get(position);
+                        DatabaseManager.getInstance(MainActivity.this).deleteNote(note);
                         notes.remove(position);
                         notesAddapter.notifyDataSetChanged();
-                        writeFile();
                         return false;
                     }
                 }
@@ -89,25 +89,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void onAddNote(View view) {
         EditText etNewNote = (EditText)findViewById(R.id.etNewNote);
-        notesAddapter.add(etNewNote.getText().toString());
+        Note note = new Note(etNewNote.getText().toString());
+        note = DatabaseManager.getInstance(this).addOrUpdateNote(note);
+        notesAddapter.add(note);
         etNewNote.setText("");
-        writeFile();
     }
 
-    private void readFile(){
-        File file = new File(getFilesDir(), "todo.txt");
+    private void readData(){
         try{
-            notes = new ArrayList<String>(FileUtils.readLines(file));
-        }catch (IOException e){
-            notes = new ArrayList<>();
+            notes = DatabaseManager.getInstance(this).getAllNote();
+        }catch (Exception e){
+            //genarate default data
+            notes = new ArrayList<Note>();
         }
     }
-    private void writeFile(){
-        File file = new File(getFilesDir(), "todo.txt");
-        try{
-            FileUtils.writeLines(file, notes);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
+
 }
