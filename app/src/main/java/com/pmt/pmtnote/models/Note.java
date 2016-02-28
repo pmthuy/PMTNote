@@ -8,13 +8,30 @@ import java.io.Serializable;
 public class Note implements Serializable {
     public long id;
     public String text;
+    public String dueDate;
+    public int priority;
 
-    public Note(long id, String text){
+    public Note(){
+
+    }
+    public Note(long id, String text, String dueDate, int priority){
         this.id = id;
         this.text = text;
+        this.dueDate = dueDate;
+        this.priority = priority;
     }
-    public Note(String text){
+    public Note(String text, String dueDate, int priority){
         this.id = -1;
         this.text = text;
+        this.dueDate = dueDate;
+        this.priority = priority;
+    }
+
+    public  String toString(){
+        return "ID :" + id +
+                " text: " + text +
+                " dueDate: " + dueDate +
+                " priority: " + priority;
+
     }
 }
